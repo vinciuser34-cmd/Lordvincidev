@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LordvinCidev · Termux A–Z</title>
+    <!-- Favicon as inline SVG -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d1117'/%3E%3Ctext x='50' y='72' font-size='70' text-anchor='middle' font-family='monospace' fill='%2300f0ff'%3E%3C/t%3E%3Ctext x='50' y='72' font-size='70' text-anchor='middle' font-family='monospace' fill='%23ff44ff'%3E%3C/t%3E%3C/svg%3E" />
+    <style>
+        /* ── reset & base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: #0b0e14;
+            color: #e0e6f0;
+            font-family: 'Segoe UI', 'Fira Code', monospace, system-ui;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121820;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f0ff;
+            border-radius: 20px;
+            box-shadow: 0 0 20px #00f0ff66;
+        }
+
+        /* ── animated bg glow ── */
+        .bg-glow {
+            position: fixed;
+            top: -40%;
+            left: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(ellipse, #00f0ff08 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 18s infinite alternate ease-in-out;
+        }
+        .bg-glow-2 {
+            position: fixed;
+            bottom: -30%;
+            right: -20%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(ellipse, #ff44ff08 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 22s infinite alternate-reverse ease-in-out;
+        }
+        @keyframes drift {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(6%, 8%) scale(1.2);
+            }
+        }
+
+        /* ── container ── */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* ── header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 28px 0 20px;
+            border-bottom: 1px solid #1f2a36;
+            gap: 16px;
+            backdrop-filter: blur(4px);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #00f0ff, #7b2ffc);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: #0b0e14;
+            box-shadow: 0 0 30px #00f0ff44, 0 0 60px #7b2ffc22;
+            transition: transform 0.3s ease;
+        }
+        .logo-icon:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #00f0ff, #a855f7, #ff44ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px #00f0ff33;
+        }
+        .logo-text span {
+            font-weight: 300;
+            color: #7a8a9e;
+            -webkit-text-fill-color: #7a8a9e;
+            background: none;
+        }
+        .header-tagline {
+            font-size: 13px;
+            color: #7a8a9e;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid #1f2a36;
+            padding: 6px 16px;
+            border-radius: 40px;
+            background: #121a24;
+            backdrop-filter: blur(4px);
+            box-shadow: inset 0 0 20px #00f0ff08;
+        }
+
+        /* ── search ── */
+        .search-wrap {
+            margin: 28px 0 32px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .search-wrap input {
+            flex: 1;
+            min-width: 220px;
+            padding: 14px 22px;
+            border-radius: 60px;
+            border: 1px solid #1f2a36;
+            background: #0f1620;
+            color: #e0e6f0;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px #00f0ff08;
+            outline: none;
+        }
+        .search-wrap input:focus {
+            border-color: #00f0ff;
+            box-shadow: 0 0 40px #00f0ff22, inset 0 0 20px #00f0ff08;
+        }
+        .search-wrap input::placeholder {
+            color: #4a5a6e;
+        }
+        .search-wrap .badge-count {
+            background: #1a2633;
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-size: 14px;
+            color: #7a8a9e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #1f2a36;
+            white-space: nowrap;
+        }
+        .search-wrap .badge-count strong {
+            color: #00f0ff;
+            font-weight: 600;
+        }
+
+        /* ── category tabs ── */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid #1a2430;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #7a8a9e;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: 1px solid transparent;
+        }
+        .tab-btn:hover {
+            color: #e0e6f0;
+            background: #1a2633;
+        }
+        .tab-btn.active {
+            color: #00f0ff;
+            background: #00f0ff12;
+            border-color: #00f0ff44;
+            box-shadow: 0 0 30px #00f0ff11;
+        }
+        .tab-btn .tab-icon {
+            margin-right: 6px;
+        }
+
+        /* ── cards grid ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 6px;
+        }
+
+        /* ── card ── */
+        .card {
+            background: #10171f;
+            border-radius: 20px;
+            padding: 20px 22px 22px;
+            border: 1px solid #1a2633;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 8px 30px #00000044;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00f0ff, #a855f7, #ff44ff);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #2a3a4a;
+            box-shadow: 0 12px 50px #00f0ff0a, 0 0 60px #7b2ffc08;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card .cmd {
+            font-family: 'Fira Code', monospace;
+            font-size: 17px;
+            font-weight: 600;
+            color: #00f0ff;
+            letter-spacing: -0.2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .card .cmd .badge {
+            font-size: 10px;
+            font-weight: 600;
+            background: #1a2a3a;
+            color: #7a9ab0;
+            padding: 0 12px;
+            border-radius: 40px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card .cmd .premium-badge {
+            background: #fbbf24;
+            color: #0b0e14;
+            padding: 0 10px;
+            border-radius: 40px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .card .desc {
+            color: #b0c0d0;
+            font-size: 14px;
+            margin: 6px 0 10px;
+            line-height: 1.5;
+        }
+        .card .example {
+            background: #0a1119;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: #a0b8d0;
+            border-left: 3px solid #00f0ff44;
+            margin-top: 6px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            transition: all 0.3s ease;
+        }
+        .card .example .hl {
+            color: #ff44ff;
+        }
+        .card .example .hl2 {
+            color: #fbbf24;
+        }
+        .card .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+        .card .tags span {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: #1a2430;
+            color: #6a8a9e;
+            padding: 2px 12px;
+            border-radius: 40px;
+            border: 1px solid #1f2a36;
+        }
+        .card .tags .tag-green {
+            color: #4ade80;
+            border-color: #4ade8033;
+        }
+        .card .tags .tag-purple {
+            color: #c084fc;
+            border-color: #c084fc33;
+        }
+        .card .tags .tag-cyan {
+            color: #22d3ee;
+            border-color: #22d3ee33;
+        }
+        .card .tags .tag-pink {
+            color: #f472b6;
+            border-color: #f472b633;
+        }
+
+        /* ── premium lock overlay ── */
+        .card.premium-locked {
+            position: relative;
+            cursor: pointer;
+            border-color: #fbbf2444;
+        }
+        .card.premium-locked .lock-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(11, 14, 20, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            color: #fbbf24;
+            font-size: 16px;
+            gap: 8px;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .card.premium-locked .lock-overlay .lock-icon {
+            font-size: 36px;
+        }
+        .card.premium-locked .lock-overlay .unlock-hint {
+            font-size: 13px;
+            color: #7a8a9e;
+            background: #1a2633;
+            padding: 4px 16px;
+            border-radius: 40px;
+            border: 1px solid #fbbf2444;
+        }
+        .card.premium-locked .lock-overlay .unlock-hint:hover {
+            background: #fbbf2422;
+        }
+        .card.premium-locked .example,
+        .card.premium-locked .tags {
+            filter: blur(3px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ── no results ── */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: #5a6a7e;
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+        .no-results.show {
+            display: block;
+        }
+
+        /* ── footer ── */
+        .footer {
+            margin-top: 56px;
+            padding-top: 28px;
+            border-top: 1px solid #1a2430;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            color: #4a5a6e;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #00f0ff;
+            text-decoration: none;
+            border-bottom: 1px dotted transparent;
+            transition: border-color 0.2s;
+        }
+        .footer a:hover {
+            border-color: #00f0ff66;
+        }
+        .footer .love {
+            color: #ff44ff;
+        }
+
+        /* ── animations ── */
+        .card {
+            opacity: 0;
+            animation: fadeUp 0.5s ease forwards;
+        }
+        /* animation delays omitted for brevity (same as before) */
+        .card:nth-child(1) { animation-delay: 0.02s; }
+        .card:nth-child(2) { animation-delay: 0.04s; }
+        /* ... we can keep the pattern but will be generated by JS anyway, not necessary to list all */
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 700px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .logo-text {
+                font-size: 20px;
+            }
+            .header-tagline {
+                font-size: 11px;
+                padding: 4px 14px;
+            }
+            .tabs {
+                gap: 4px;
+            }
+            .tab-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .search-wrap input {
+                font-size: 14px;
+                padding: 12px 18px;
+            }
+            .search-wrap .badge-count {
+                font-size: 12px;
+                padding: 6px 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 14px 40px;
+            }
+            .card {
+                padding: 16px 16px 18px;
+            }
+            .card .cmd {
+                font-size: 15px;
+                flex-wrap: wrap;
+            }
+            .card .example {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* ── scroll indicator ── */
+        .scroll-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: #00f0ff22;
+            backdrop-filter: blur(12px);
+            border: 1px solid #00f0ff44;
+            color: #00f0ff;
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px #00f0ff11;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .scroll-top:hover {
+            background: #00f0ff33;
+            border-color: #00f0ff88;
+            transform: scale(1.08);
+        }
+
+        /* ── modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-box {
+            background: #121a24;
+            border: 1px solid #2a3a4a;
+            border-radius: 24px;
+            padding: 40px 36px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 80px #00000088;
+            text-align: center;
+        }
+        .modal-box h2 {
+            color: #fbbf24;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .modal-box p {
+            color: #7a8a9e;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .modal-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: 1px solid #1f2a36;
+            background: #0f1620;
+            color: #e0e6f0;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            margin-bottom: 16px;
+            transition: border-color 0.3s;
+        }
+        .modal-box input:focus {
+            border-color: #fbbf24;
+        }
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .modal-box .modal-actions button {
+            padding: 10px 28px;
+            border-radius: 60px;
+            border: none;
+            background: #fbbf24;
+            color: #0b0e14;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .modal-box .modal-actions button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 30px #fbbf2444;
+        }
+        .modal-box .modal-actions button.cancel {
+            background: #1a2633;
+            color: #7a8a9e;
+        }
+        .modal-box .modal-actions button.cancel:hover {
+            background: #2a3a4a;
+            box-shadow: none;
+        }
+        .modal-box .error-msg {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+        .modal-box .success-msg {
+            color: #4ade80;
+            font-size: 13px;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+        /* ── utility ── */
+        .text-glow {
+            text-shadow: 0 0 30px #00f0ff22;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mt-1 {
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- background glows -->
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <!-- scroll to top -->
+    <div class="scroll-top" id="scrollTop" title="Back to top">↑</div>
+
+    <!-- modal -->
+    <div class="modal-overlay" id="premiumModal">
+        <div class="modal-box">
+            <h2>🔒 Premium Access</h2>
+            <p>Enter the password to unlock premium tools.</p>
+            <input type="password" id="passwordInput" placeholder="Enter password..." autocomplete="off" />
+            <div id="modalError" class="error-msg"></div>
+            <div class="modal-actions">
+                <button id="modalUnlockBtn">Unlock</button>
+                <button class="cancel" id="modalCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- header -->
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon">⌘</div>
+                <div class="logo-text">Lordvin<span>Cidev</span></div>
+            </div>
+            <div class="header-tagline">⚡ Termux · A → Z</div>
+        </header>
+
+        <!-- search -->
+        <div class="search-wrap">
+            <input type="text" id="searchInput" placeholder="🔍 Search commands, tools, repos…" />
+            <div class="badge-count">📦 <strong id="countDisplay">0</strong> entries</div>
+        </div>
+
+        <!-- tabs -->
+        <nav class="tabs" id="tabContainer">
+            <button class="tab-btn active" data-tab="all"><span class="tab-icon">⊞</span> All</button>
+            <button class="tab-btn" data-tab="cmd"><span class="tab-icon">⌨</span> Commands</button>
+            <button class="tab-btn" data-tab="tool"><span class="tab-icon">🛠</span> Tools</button>
+            <button class="tab-btn" data-tab="git"><span class="tab-icon">🔗</span> Git Clones</button>
+            <button class="tab-btn" data-tab="repo"><span class="tab-icon">📂</span> Repos</button>
+            <button class="tab-btn" data-tab="pkg"><span class="tab-icon">📦</span> Packages</button>
+            <button class="tab-btn" data-tab="system"><span class="tab-icon">⚙</span> System</button>
+            <button class="tab-btn" data-tab="network"><span class="tab-icon">🌐</span> Network</button>
+            <button class="tab-btn" data-tab="effect"><span class="tab-icon">🎨</span> Effects</button>
+        </nav>
+
+        <!-- cards grid -->
+        <div class="cards-grid" id="cardsGrid">
+            <!-- cards will be rendered by JS -->
+        </div>
+
+        <!-- no results -->
+        <div class="no-results" id="noResults">✨ No matches found — try a different keyword</div>
+
+        <!-- footer -->
+        <footer class="footer">
+            <div>
+                <span class="love">❤</span> LordvinCidev · Termux Encyclopedia
+            </div>
+            <div>
+                <span>⚡</span> 2026 · <a href="#">github.com/lordvincidev</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // ──────────────────────────────────────────────
+        //  PASSWORD (stored as comment for reference)
+        //  // PASSWORD: lordvinciAH90
+        // ──────────────────────────────────────────────
+
+        const PREMIUM_PASSWORD = 'lordvinciAH90'; // stored in code, not shown on UI
+
+        // ──────────────────────────────────────────────
+        //  DATA  –  A–Z Termux Commands, Tools, Clones
+        // ──────────────────────────────────────────────
+
+        const entries = [
+
+            // ── COMMANDS (cmd) ──
+            {
+                id: 'ls',
+                category: 'cmd',
+                command: 'ls',
+                badge: 'core',
+                desc: 'List directory contents with colors and options.',
+                example: 'ls -la --color=auto',
+                tags: ['file', 'basic']
+            }, {
+                id: 'cd',
+                category: 'cmd',
+                command: 'cd',
+                badge: 'core',
+                desc: 'Change the current working directory.',
+                example: 'cd /data/data/com.termux/files/home',
+                tags: ['navigation', 'basic']
+            }, {
+                id: 'pwd',
+                category: 'cmd',
+                command: 'pwd',
+                badge: 'core',
+                desc: 'Print the absolute path of the current directory.',
+                example: 'pwd',
+                tags: ['navigation', 'basic']
+            }, {
+                id: 'mkdir',
+                category: 'cmd',
+                command: 'mkdir',
+                badge: 'core',
+                desc: 'Create one or more new directories.',
+                example: 'mkdir -p projects/termux/scripts',
+                tags: ['file', 'basic']
+            }, {
+                id: 'rmdir',
+                category: 'cmd',
+                command: 'rmdir',
+                badge: 'core',
+                desc: 'Remove empty directories.',
+                example: 'rmdir old_folder',
+                tags: ['file', 'basic']
+            }, {
+                id: 'rm',
+                category: 'cmd',
+                command: 'rm',
+                badge: 'core',
+                desc: 'Remove files or directories (use -rf carefully!).',
+                example: 'rm -rf temp/',
+                tags: ['file', 'danger']
+            }, {
+                id: 'cp',
+                category: 'cmd',
+                command: 'cp',
+                badge: 'core',
+                desc: 'Copy files or directories from source to destination.',
+                example: 'cp -r ~/backup ~/projects/',
+                tags: ['file', 'basic']
+            }, {
+                id: 'mv',
+                category: 'cmd',
+                command: 'mv',
+                badge: 'core',
+                desc: 'Move or rename files and directories.',
+                example: 'mv oldname.py newname.py',
+                tags: ['file', 'basic']
+            }, {
+                id: 'touch',
+                category: 'cmd',
+                command: 'touch',
+                badge: 'core',
+                desc: 'Create an empty file or update its timestamp.',
+                example: 'touch config.ini',
+                tags: ['file', 'basic']
+            }, {
+                id: 'cat',
+                category: 'cmd',
+                command: 'cat',
+                badge: 'core',
+                desc: 'Concatenate and display file contents.',
+                example: 'cat ~/.bashrc',
+                tags: ['view', 'basic']
+            }, {
+                id: 'nano',
+                category: 'cmd',
+                command: 'nano',
+                badge: 'editor',
+                desc: 'Simple terminal-based text editor.',
+                example: 'nano script.sh',
+                tags: ['editor', 'basic']
+            }, {
+                id: 'vim',
+                category: 'cmd',
+                command: 'vim',
+                badge: 'editor',
+                desc: 'Powerful modal text editor (install vim-python).',
+                example: 'vim ~/.termux/termux.properties',
+                tags: ['editor', 'advanced']
+            }, {
+                id: 'chmod',
+                category: 'cmd',
+                command: 'chmod',
+                badge: 'core',
+                desc: 'Change file permissions (read/write/execute).',
+                example: 'chmod +x script.sh',
+                tags: ['permissions', 'basic']
+            }, {
+                id: 'chown',
+                category: 'cmd',
+                command: 'chown',
+                badge: 'core',
+                desc: 'Change file owner and group.',
+                example: 'chown root:root file',
+                tags: ['permissions', 'advanced']
+            }, {
+                id: 'find',
+                category: 'cmd',
+                command: 'find',
+                badge: 'util',
+                desc: 'Search for files/directories matching patterns.',
+                example: 'find . -name "*.py" -type f',
+                tags: ['search', 'advanced']
+            }, {
+                id: 'grep',
+                category: 'cmd',
+                command: 'grep',
+                badge: 'util',
+                desc: 'Search text using patterns (regex).',
+                example: 'grep -r "error" ./logs/',
+                tags: ['search', 'advanced']
+            }, {
+                id: 'awk',
+                category: 'cmd',
+                command: 'awk',
+                badge: 'util',
+                desc: 'Pattern scanning and text processing language.',
+                example: "awk '{print $1}' data.txt",
+                tags: ['text', 'advanced']
+            }, {
+                id: 'sed',
+                category: 'cmd',
+                command: 'sed',
+                badge: 'util',
+                desc: 'Stream editor for filtering and transforming text.',
+                example: "sed 's/old/new/g' file.txt",
+                tags: ['text', 'advanced']
+            }, {
+                id: 'head',
+                category: 'cmd',
+                command: 'head',
+                badge: 'core',
+                desc: 'Display the first few lines of a file.',
+                example: 'head -20 large.log',
+                tags: ['view', 'basic']
+            }, {
+                id: 'tail',
+                category: 'cmd',
+                command: 'tail',
+                badge: 'core',
+                desc: 'Display the last few lines (follow with -f).',
+                example: 'tail -f logfile.txt',
+                tags: ['view', 'basic']
+            }, {
+                id: 'echo',
+                category: 'cmd',
+                command: 'echo',
+                badge: 'core',
+                desc: 'Print text or variables to stdout.',
+                example: 'echo "Hello, Termux!"',
+                tags: ['output', 'basic']
+            }, {
+                id: 'export',
+                category: 'cmd',
+                command: 'export',
+                badge: 'core',
+                desc: 'Set environment variables.',
+                example: 'export TERMUX_VERSION=0.118',
+                tags: ['env', 'basic']
+            }, {
+                id: 'env',
+                category: 'cmd',
+                command: 'env',
+                badge: 'core',
+                desc: 'Display or run a program with modified environment.',
+                example: 'env | grep PATH',
+                tags: ['env', 'basic']
+            }, {
+                id: 'whoami',
+                category: 'cmd',
+                command: 'whoami',
+                badge: 'core',
+                desc: 'Print the current user name.',
+                example: 'whoami',
+                tags: ['system', 'basic']
+            }, {
+                id: 'hostname',
+                category: 'cmd',
+                command: 'hostname',
+                badge: 'core',
+                desc: 'Show or set the system hostname.',
+                example: 'hostname',
+                tags: ['system', 'basic']
+            }, {
+                id: 'uname',
+                category: 'cmd',
+                command: 'uname',
+                badge: 'core',
+                desc: 'Print system information (kernel, arch, etc.).',
+                example: 'uname -a',
+                tags: ['system', 'basic']
+            }, {
+                id: 'date',
+                category: 'cmd',
+                command: 'date',
+                badge: 'core',
+                desc: 'Display or set the system date and time.',
+                example: 'date +"%Y-%m-%d %H:%M"',
+                tags: ['system', 'basic']
+            }, {
+                id: 'uptime',
+                category: 'cmd',
+                command: 'uptime',
+                badge: 'core',
+                desc: 'Show how long the system has been running.',
+                example: 'uptime',
+                tags: ['system', 'basic']
+            }, {
+                id: 'ps',
+                category: 'cmd',
+                command: 'ps',
+                badge: 'core',
+                desc: 'Display active processes.',
+                example: 'ps aux | grep termux',
+                tags: ['process', 'basic']
+            }, {
+                id: 'kill',
+                category: 'cmd',
+                command: 'kill',
+                badge: 'core',
+                desc: 'Terminate a process by PID.',
+                example: 'kill -9 1234',
+                tags: ['process', 'danger']
+            }, {
+                id: 'top',
+                category: 'cmd',
+                command: 'top',
+                badge: 'core',
+                desc: 'Interactive process viewer (system monitor).',
+                example: 'top',
+                tags: ['process', 'system']
+            }, {
+                id: 'clear',
+                category: 'cmd',
+                command: 'clear',
+                badge: 'core',
+                desc: 'Clear the terminal screen.',
+                example: 'clear',
+                tags: ['ui', 'basic']
+            }, {
+                id: 'history',
+                category: 'cmd',
+                command: 'history',
+                badge: 'core',
+                desc: 'Show command history.',
+                example: 'history | grep git',
+                tags: ['ui', 'basic']
+            }, {
+                id: 'alias',
+                category: 'cmd',
+                command: 'alias',
+                badge: 'core',
+                desc: 'Create a shortcut for a command.',
+                example: 'alias ll="ls -la"',
+                tags: ['config', 'basic']
+            },
+
+            // ── TOOLS (tool) ──
+            {
+                id: 'python',
+                category: 'tool',
+                command: 'python',
+                badge: 'lang',
+                desc: 'Python 3 interpreter — install with pkg install python.',
+                example: 'python -c "print(2+2)"',
+                tags: ['lang', 'scripting']
+            }, {
+                id: 'node',
+                category: 'tool',
+                command: 'node',
+                badge: 'lang',
+                desc: 'Node.js JavaScript runtime.',
+                example: 'node -e "console.log(2+2)"',
+                tags: ['lang', 'js']
+            }, {
+                id: 'npm',
+                category: 'tool',
+                command: 'npm',
+                badge: 'lang',
+                desc: 'Node Package Manager — install packages.',
+                example: 'npm install -g yarn',
+                tags: ['js', 'package']
+            }, {
+                id: 'git',
+                category: 'tool',
+                command: 'git',
+                badge: 'vcs',
+                desc: 'Distributed version control system.',
+                example: 'git clone https://github.com/user/repo.git',
+                tags: ['vcs', 'essential']
+            }, {
+                id: 'curl',
+                category: 'tool',
+                command: 'curl',
+                badge: 'net',
+                desc: 'Transfer data from/to a server (HTTP, FTP, etc.).',
+                example: 'curl -s https://api.ipify.org',
+                tags: ['network', 'http']
+            }, {
+                id: 'wget',
+                category: 'tool',
+                command: 'wget',
+                badge: 'net',
+                desc: 'Download files from the web.',
+                example: 'wget https://example.com/file.zip',
+                tags: ['network', 'download']
+            }, {
+                id: 'ssh',
+                category: 'tool',
+                command: 'ssh',
+                badge: 'net',
+                desc: 'Secure Shell — remote login and command execution.',
+                example: 'ssh user@192.168.1.100',
+                tags: ['network', 'security']
+            }, {
+                id: 'scp',
+                category: 'tool',
+                command: 'scp',
+                badge: 'net',
+                desc: 'Secure copy — transfer files over SSH.',
+                example: 'scp file.txt user@host:/path/',
+                tags: ['network', 'security']
+            }, {
+                id: 'ping',
+                category: 'tool',
+                command: 'ping',
+                badge: 'net',
+                desc: 'Test network connectivity to a host.',
+                example: 'ping -c 4 google.com',
+                tags: ['network', 'diagnostic']
+            }, {
+                id: 'nmap',
+                category: 'tool',
+                command: 'nmap',
+                badge: 'net',
+                desc: 'Network scanner — discover hosts and services.',
+                example: 'nmap -sP 192.168.1.0/24',
+                tags: ['network', 'security']
+            }, {
+                id: 'openssl',
+                category: 'tool',
+                command: 'openssl',
+                badge: 'crypto',
+                desc: 'Cryptography toolkit — SSL, hashing, encryption.',
+                example: 'openssl rand -hex 16',
+                tags: ['security', 'crypto']
+            }, {
+                id: 'tar',
+                category: 'tool',
+                command: 'tar',
+                badge: 'archive',
+                desc: 'Archive and compress files (.tar, .gz, .xz).',
+                example: 'tar -xzf archive.tar.gz',
+                tags: ['archive', 'basic']
+            }, {
+                id: 'zip',
+                category: 'tool',
+                command: 'zip',
+                badge: 'archive',
+                desc: 'Compress files into a .zip archive.',
+                example: 'zip -r backup.zip ./folder',
+                tags: ['archive', 'basic']
+            }, {
+                id: 'unzip',
+                category: 'tool',
+                command: 'unzip',
+                badge: 'archive',
+                desc: 'Extract .zip archives.',
+                example: 'unzip archive.zip -d ./output',
+                tags: ['archive', 'basic']
+            }, {
+                id: 'make',
+                category: 'tool',
+                command: 'make',
+                badge: 'build',
+                desc: 'Build automation tool (compile from source).',
+                example: 'make && make install',
+                tags: ['build', 'dev']
+            }, {
+                id: 'cmake',
+                category: 'tool',
+                command: 'cmake',
+                badge: 'build',
+                desc: 'Cross-platform build system generator.',
+                example: 'cmake -B build -S .',
+                tags: ['build', 'dev']
+            }, {
+                id: 'gcc',
+                category: 'tool',
+                command: 'gcc',
+                badge: 'compiler',
+                desc: 'GNU C/C++ compiler.',
+                example: 'gcc -o prog main.c',
+                tags: ['compiler', 'c']
+            }, {
+                id: 'clang',
+                category: 'tool',
+                command: 'clang',
+                badge: 'compiler',
+                desc: 'C/C++ compiler from LLVM.',
+                example: 'clang -O2 -o prog main.c',
+                tags: ['compiler', 'c']
+            }, {
+                id: 'rustc',
+                category: 'tool',
+                command: 'rustc',
+                badge: 'compiler',
+                desc: 'Rust language compiler.',
+                example: 'rustc main.rs && ./main',
+                tags: ['compiler', 'rust']
+            }, {
+                id: 'cargo',
+                category: 'tool',
+                command: 'cargo',
+                badge: 'lang',
+                desc: 'Rust package manager and build tool.',
+                example: 'cargo new my_project',
+                tags: ['rust', 'package']
+            },
+
+            // ── GIT CLONES (git) ──
+            {
+                id: 'clone-termux-style',
+                category: 'git',
+                command: 'termux-style',
+                badge: 'clone',
+                desc: 'Colorize and customize your Termux prompt.',
+                example: 'git clone https://github.com/adi1090x/termux-style',
+                tags: ['theme', 'ui']
+            }, {
+                id: 'clone-termux-extra',
+                category: 'git',
+                command: 'termux-extra',
+                badge: 'clone',
+                desc: 'Extra utilities and scripts for Termux.',
+                example: 'git clone https://github.com/termux/termux-extra',
+                tags: ['utils', 'scripts']
+            }, {
+                id: 'clone-termux-packages',
+                category: 'git',
+                command: 'termux-packages',
+                badge: 'clone',
+                desc: 'Official Termux package recipes (build scripts).',
+                example: 'git clone https://github.com/termux/termux-packages',
+                tags: ['build', 'packages']
+            }, {
+                id: 'clone-termux-root',
+                category: 'git',
+                command: 'termux-root',
+                badge: 'clone',
+                desc: 'Root access tools and modules for Termux.',
+                example: 'git clone https://github.com/termux/termux-root',
+                tags: ['root', 'system']
+            }, {
+                id: 'clone-zsh-termux',
+                category: 'git',
+                command: 'zsh-termux',
+                badge: 'clone',
+                desc: 'Zsh configuration with plugins for Termux.',
+                example: 'git clone https://github.com/adi1090x/termux-zsh',
+                tags: ['shell', 'zsh']
+            }, {
+                id: 'clone-toolbox',
+                category: 'git',
+                command: 'toolbox',
+                badge: 'clone',
+                desc: 'Collection of useful Termux scripts and tools.',
+                example: 'git clone https://github.com/rootedcyber/ToolBox',
+                tags: ['utils', 'scripts']
+            }, {
+                id: 'clone-hack-tools',
+                category: 'git',
+                command: 'hack-tools',
+                badge: 'clone',
+                desc: 'Penetration testing tools for Termux (educational).',
+                example: 'git clone https://github.com/technicalfate/Hack-Tools',
+                tags: ['security', 'pentest']
+            }, {
+                id: 'clone-phishing',
+                category: 'git',
+                command: 'phishing',
+                badge: 'clone',
+                desc: 'Phishing simulation framework (ethical use only).',
+                example: 'git clone https://github.com/htr-tech/zphisher',
+                tags: ['security', 'simulation']
+            }, {
+                id: 'clone-ip-tools',
+                category: 'git',
+                command: 'ip-tools',
+                badge: 'clone',
+                desc: 'IP information and network tools.',
+                example: 'git clone https://github.com/rajkumardusad/IP-Tracer',
+                tags: ['network', 'geo']
+            }, {
+                id: 'clone-banner',
+                category: 'git',
+                command: 'banner',
+                badge: 'clone',
+                desc: 'Custom ASCII banners and startup screens.',
+                example: 'git clone https://github.com/rootedcyber/Banner',
+                tags: ['ui', 'ascii']
+            },
+
+            // ── REPOS (repo) ──
+            {
+                id: 'repo-termux',
+                category: 'repo',
+                command: 'termux-repo',
+                badge: 'repo',
+                desc: 'Official Termux package repository (main).',
+                example: 'pkg install termux-tools',
+                tags: ['official', 'packages']
+            }, {
+                id: 'repo-x11',
+                category: 'repo',
+                command: 'x11-repo',
+                badge: 'repo',
+                desc: 'X11 graphical applications for Termux.',
+                example: 'pkg install x11-repo && pkg install firefox',
+                tags: ['graphical', 'x11']
+            }, {
+                id: 'repo-root',
+                category: 'repo',
+                command: 'root-repo',
+                badge: 'repo',
+                desc: 'Root-only packages (requires rooted device).',
+                example: 'pkg install root-repo',
+                tags: ['root', 'system']
+            }, {
+                id: 'repo-game',
+                category: 'repo',
+                command: 'game-repo',
+                badge: 'repo',
+                desc: 'Games and entertainment packages.',
+                example: 'pkg install game-repo',
+                tags: ['games', 'fun']
+            }, {
+                id: 'repo-science',
+                category: 'repo',
+                command: 'science-repo',
+                badge: 'repo',
+                desc: 'Scientific and mathematical tools.',
+                example: 'pkg install science-repo',
+                tags: ['science', 'math']
+            }, {
+                id: 'repo-php',
+                category: 'repo',
+                command: 'php-repo',
+                badge: 'repo',
+                desc: 'PHP and web development packages.',
+                example: 'pkg install php-repo',
+                tags: ['web', 'php']
+            }, {
+                id: 'repo-python',
+                category: 'repo',
+                command: 'python-repo',
+                badge: 'repo',
+                desc: 'Python packages and libraries.',
+                example: 'pkg install python-repo',
+                tags: ['python', 'packages']
+            }, {
+                id: 'repo-node',
+                category: 'repo',
+                command: 'node-repo',
+                badge: 'repo',
+                desc: 'Node.js and npm packages.',
+                example: 'pkg install node-repo',
+                tags: ['node', 'js']
+            },
+
+            // ── PACKAGES (pkg) ──
+            {
+                id: 'pkg-update',
+                category: 'pkg',
+                command: 'pkg update',
+                badge: 'pkg',
+                desc: 'Update package lists from repositories.',
+                example: 'pkg update && pkg upgrade -y',
+                tags: ['maintenance', 'essential']
+            }, {
+                id: 'pkg-upgrade',
+                category: 'pkg',
+                command: 'pkg upgrade',
+                badge: 'pkg',
+                desc: 'Upgrade all installed packages to latest versions.',
+                example: 'pkg upgrade -y',
+                tags: ['maintenance', 'essential']
+            }, {
+                id: 'pkg-install',
+                category: 'pkg',
+                command: 'pkg install',
+                badge: 'pkg',
+                desc: 'Install one or more packages.',
+                example: 'pkg install python nodejs git',
+                tags: ['install', 'basic']
+            }, {
+                id: 'pkg-uninstall',
+                category: 'pkg',
+                command: 'pkg uninstall',
+                badge: 'pkg',
+                desc: 'Remove installed packages.',
+                example: 'pkg uninstall firefox',
+                tags: ['remove', 'basic']
+            }, {
+                id: 'pkg-list',
+                category: 'pkg',
+                command: 'pkg list',
+                badge: 'pkg',
+                desc: 'List installed packages.',
+                example: 'pkg list-all',
+                tags: ['list', 'basic']
+            }, {
+                id: 'pkg-search',
+                category: 'pkg',
+                command: 'pkg search',
+                badge: 'pkg',
+                desc: 'Search for packages by name or description.',
+                example: 'pkg search python',
+                tags: ['search', 'basic']
+            }, {
+                id: 'pkg-show',
+                category: 'pkg',
+                command: 'pkg show',
+                badge: 'pkg',
+                desc: 'Show detailed information about a package.',
+                example: 'pkg show git',
+                tags: ['info', 'basic']
+            }, {
+                id: 'pkg-clean',
+                category: 'pkg',
+                command: 'pkg clean',
+                badge: 'pkg',
+                desc: 'Clean downloaded package caches.',
+                example: 'pkg clean',
+                tags: ['maintenance', 'cache']
+            },
+
+            // ── SYSTEM (system) ──
+            {
+                id: 'termux-setup-storage',
+                category: 'system',
+                command: 'termux-setup-storage',
+                badge: 'termux',
+                desc: 'Grant storage access and create ~/storage symlinks.',
+                example: 'termux-setup-storage',
+                tags: ['storage', 'permission']
+            }, {
+                id: 'termux-open',
+                category: 'system',
+                command: 'termux-open',
+                badge: 'termux',
+                desc: 'Open a file or URL with the default app.',
+                example: 'termux-open https://termux.com',
+                tags: ['open', 'android']
+            }, {
+                id: 'termux-open-url',
+                category: 'system',
+                command: 'termux-open-url',
+                badge: 'termux',
+                desc: 'Open a URL in the default browser.',
+                example: 'termux-open-url https://github.com',
+                tags: ['open', 'browser']
+            }, {
+                id: 'termux-wifi',
+                category: 'system',
+                command: 'termux-wifi',
+                badge: 'termux',
+                desc: 'Get WiFi connection information.',
+                example: 'termux-wifi-connectioninfo',
+                tags: ['wifi', 'network']
+            }, {
+                id: 'termux-battery',
+                category: 'system',
+                command: 'termux-battery',
+                badge: 'termux',
+                desc: 'Display battery status and level.',
+                example: 'termux-battery-status',
+                tags: ['battery', 'hardware']
+            }, {
+                id: 'termux-notification',
+                category: 'system',
+                command: 'termux-notification',
+                badge: 'termux',
+                desc: 'Send Android notifications from the terminal.',
+                example: 'termux-notification --title "Done" --content "Task completed"',
+                tags: ['notification', 'android']
+            }, {
+                id: 'termux-toast',
+                category: 'system',
+                command: 'termux-toast',
+                badge: 'termux',
+                desc: 'Show a toast message on the Android screen.',
+                example: 'termux-toast "Hello from Termux"',
+                tags: ['ui', 'android']
+            }, {
+                id: 'termux-clipboard',
+                category: 'system',
+                command: 'termux-clipboard',
+                badge: 'termux',
+                desc: 'Access the Android clipboard.',
+                example: 'termux-clipboard-set "text"',
+                tags: ['clipboard', 'android']
+            }, {
+                id: 'termux-telephony',
+                category: 'system',
+                command: 'termux-telephony',
+                badge: 'termux',
+                desc: 'Access phone information and cellular data.',
+                example: 'termux-telephony-deviceinfo',
+                tags: ['phone', 'hardware']
+            },
+
+            // ── NETWORK (network) ──
+            {
+                id: 'netstat',
+                category: 'network',
+                command: 'netstat',
+                badge: 'net',
+                desc: 'Display network connections, routing tables, etc.',
+                example: 'netstat -tulpn',
+                tags: ['network', 'diagnostic']
+            }, {
+                id: 'ifconfig',
+                category: 'network',
+                command: 'ifconfig',
+                badge: 'net',
+                desc: 'Configure and display network interfaces.',
+                example: 'ifconfig wlan0',
+                tags: ['network', 'interface']
+            }, {
+                id: 'ip',
+                category: 'network',
+                command: 'ip',
+                badge: 'net',
+                desc: 'Show/manipulate routing, devices, policy routing.',
+                example: 'ip addr show',
+                tags: ['network', 'interface']
+            }, {
+                id: 'nslookup',
+                category: 'network',
+                command: 'nslookup',
+                badge: 'net',
+                desc: 'Query DNS for domain name resolution.',
+                example: 'nslookup google.com',
+                tags: ['dns', 'diagnostic']
+            }, {
+                id: 'dig',
+                category: 'network',
+                command: 'dig',
+                badge: 'net',
+                desc: 'DNS lookup utility (more detailed than nslookup).',
+                example: 'dig +short google.com',
+                tags: ['dns', 'diagnostic']
+            }, {
+                id: 'traceroute',
+                category: 'network',
+                command: 'traceroute',
+                badge: 'net',
+                desc: 'Trace the route to a network host.',
+                example: 'traceroute google.com',
+                tags: ['network', 'diagnostic']
+            }, {
+                id: 'whois',
+                category: 'network',
+                command: 'whois',
+                badge: 'net',
+                desc: 'Query domain registration and ownership info.',
+                example: 'whois example.com',
+                tags: ['domain', 'info']
+            }, {
+                id: 'nc',
+                category: 'network',
+                command: 'nc (netcat)',
+                badge: 'net',
+                desc: 'Networking utility for reading/writing network connections.',
+                example: 'nc -zv 192.168.1.1 80',
+                tags: ['network', 'utility']
+            },
+
+            // ── NEW ADDITIONS: TOOLS & EFFECTS ──
+            // Tools (Premium)
+            {
+                id: 'darkfly',
+                category: 'tool',
+                command: 'darkfly',
+                badge: 'recon',
+                desc: 'Advanced information gathering tool for Termux.',
+                example: 'darkfly -t target.com',
+                tags: ['recon', 'security'],
+                premium: true
+            }, {
+                id: 'redhawk',
+                category: 'tool',
+                command: 'redhawk',
+                badge: 'recon',
+                desc: 'All-in-one information gathering tool (whois, DNS, etc.).',
+                example: 'redhawk -u https://example.com',
+                tags: ['recon', 'security'],
+                premium: true
+            }, {
+                id: 'osint',
+                category: 'tool',
+                command: 'osint',
+                badge: 'osint',
+                desc: 'Open Source Intelligence gathering toolkit.',
+                example: 'osint --target example.com',
+                tags: ['osint', 'security'],
+                premium: true
+            }, {
+                id: 'nethunter',
+                category: 'tool',
+                command: 'nethunter',
+                badge: 'root',
+                desc: 'Install Kali Nethunter on Termux (requires root).',
+                example: 'nethunter install',
+                tags: ['root', 'security'],
+                premium: true
+            }, {
+                id: 'ghostai',
+                category: 'tool',
+                command: 'ghostai',
+                badge: 'ai',
+                desc: 'AI-based assistant and automation tools for Termux.',
+                example: 'ghostai --query "hello"',
+                tags: ['ai', 'automation'],
+                premium: true
+            }, {
+                id: 'tbomb',
+                category: 'tool',
+                command: 'tbomb',
+                badge: 'sms',
+                desc: 'SMS bombing tool (use responsibly and ethically).',
+                example: 'tbomb --number 1234567890 --count 10',
+                tags: ['sms', 'utility'],
+                premium: true
+            }, {
+                id: 'tigervirus',
+                category: 'tool',
+                command: 'tigervirus',
+                badge: 'virus',
+                desc: 'Virus generation and testing framework (educational).',
+                example: 'tigervirus --create --type ransomware',
+                tags: ['security', 'educational'],
+                premium: true
+            },
+
+            // Effects (free)
+            {
+                id: 'calcurse',
+                category: 'effect',
+                command: 'calcurse',
+                badge: 'calendar',
+                desc: 'Terminal calendar and scheduling tool with curses interface.',
+                example: 'calcurse',
+                tags: ['calendar', 'utility']
+            }, {
+                id: 'cacafire',
+                category: 'effect',
+                command: 'cacafire',
+                badge: 'effect',
+                desc: 'Terminal fire animation using libcaca (color ASCII art).',
+                example: 'cacafire',
+                tags: ['fun', 'animation']
+            }, {
+                id: 'screenfetch',
+                category: 'effect',
+                command: 'screenfetch',
+                badge: 'system',
+                desc: 'Display system information in a cool ASCII style with logos.',
+                example: 'screenfetch',
+                tags: ['system', 'ascii']
+            }, {
+                id: 'hollywood',
+                category: 'effect',
+                command: 'hollywood',
+                badge: 'effect',
+                desc: 'Simulate Hollywood-style terminal hacking effects.',
+                example: 'hollywood',
+                tags: ['fun', 'animation']
+            }, {
+                id: 'cmatrix',
+                category: 'effect',
+                command: 'cmatrix',
+                badge: 'effect',
+                desc: 'Matrix digital rain effect in the terminal (like the movie).',
+                example: 'cmatrix -b',
+                tags: ['fun', 'animation']
+            }, {
+                id: 'rxfetch',
+                category: 'effect',
+                command: 'rxfetch',
+                badge: 'fetch',
+                desc: 'Simple and fast system fetch script written in Rust.',
+                example: 'rxfetch',
+                tags: ['system', 'fetch']
+            }, {
+                id: 'figlet',
+                category: 'effect',
+                command: 'figlet',
+                badge: 'ascii',
+                desc: 'Generate ASCII art text banners from input.',
+                example: 'figlet "Lordvin"',
+                tags: ['ascii', 'fun']
+            }, {
+                id: 'toilet',
+                category: 'effect',
+                command: 'toilet',
+                badge: 'ascii',
+                desc: 'Colorful ASCII art text generator with various fonts.',
+                example: 'toilet -f mono12 "Termux"',
+                tags: ['ascii', 'fun']
+            }
+        ];
+
+        // ──────────────────────────────────────────────
+        //  RENDER ENGINE
+        // ──────────────────────────────────────────────
+
+        const grid = document.getElementById('cardsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const countDisplay = document.getElementById('countDisplay');
+        const noResults = document.getElementById('noResults');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        let activeTab = 'all';
+        let searchQuery = '';
+        let premiumUnlocked = false;
+
+        // modal elements
+        const modal = document.getElementById('premiumModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const modalError = document.getElementById('modalError');
+        const modalUnlockBtn = document.getElementById('modalUnlockBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+
+        function openModal() {
+            modal.classList.add('open');
+            passwordInput.value = '';
+            modalError.textContent = '';
+            passwordInput.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
+        function attemptUnlock() {
+            const entered = passwordInput.value.trim();
+            if (entered === PREMIUM_PASSWORD) {
+                premiumUnlocked = true;
+                modalError.textContent = '✅ Unlocked!';
+                modalError.className = 'success-msg';
+                setTimeout(() => {
+                    closeModal();
+                    render();
+                }, 600);
+            } else {
+                modalError.textContent = '❌ Incorrect password. Try again.';
+                modalError.className = 'error-msg';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        modalUnlockBtn.addEventListener('click', attemptUnlock);
+        passwordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') attemptUnlock();
+        });
+        modalCancelBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function render() {
+            const filtered = entries.filter(entry => {
+                if (activeTab !== 'all' && entry.category !== activeTab) return false;
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    const match =
+                        entry.command.toLowerCase().includes(q) ||
+                        entry.desc.toLowerCase().includes(q) ||
+                        entry.tags.some(t => t.toLowerCase().includes(q)) ||
+                        entry.id.toLowerCase().includes(q);
+                    if (!match) return false;
+                }
+                return true;
+            });
+
+            countDisplay.textContent = filtered.length;
+            noResults.classList.toggle('show', filtered.length === 0);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(entry => {
+                const isPremium = entry.premium === true;
+                const isLocked = isPremium && !premiumUnlocked;
+
+                const tagsHtml = entry.tags.map(t =>
+                    `<span>${t}</span>`
+                ).join('');
+
+                let icon = '⌨';
+                if (entry.category === 'tool') icon = '🛠';
+                else if (entry.category === 'git') icon = '🔗';
+                else if (entry.category === 'repo') icon = '📂';
+                else if (entry.category === 'pkg') icon = '📦';
+                else if (entry.category === 'system') icon = '⚙';
+                else if (entry.category === 'network') icon = '🌐';
+                else if (entry.category === 'effect') icon = '🎨';
+
+                // premium badge
+                const premiumBadgeHtml = isPremium ? `<span class="premium-badge">⭐ PREMIUM</span>` : '';
+
+                // if locked, we show overlay
+                let cardClass = 'card';
+                if (isLocked) cardClass += ' premium-locked';
+
+                // build example with lock if locked
+                let exampleHtml = `<div class="example">${entry.example}</div>`;
+                if (isLocked) {
+                    exampleHtml = `<div class="example" style="filter:blur(3px);user-select:none;pointer-events:none;">${entry.example}</div>`;
+                }
+
+                // build tags with blur if locked
+                let tagsHtmlFinal = `<div class="tags" style="${isLocked ? 'filter:blur(3px);pointer-events:none;user-select:none;' : ''}">${tagsHtml}</div>`;
+
+                // overlay for locked
+                let overlayHtml = '';
+                if (isLocked) {
+                    overlayHtml = `
+                        <div class="lock-overlay" data-premium-id="${entry.id}">
+                            <div class="lock-icon">🔒</div>
+                            <div class="unlock-hint">Click to unlock premium</div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="${cardClass}" data-id="${entry.id}" data-premium="${isPremium ? 'true' : 'false'}">
+                        ${overlayHtml}
+                        <div class="cmd">
+                            <span>${icon} ${entry.command}</span>
+                            <span class="badge">${entry.badge}</span>
+                            ${premiumBadgeHtml}
+                        </div>
+                        <div class="desc">${entry.desc}</div>
+                        ${exampleHtml}
+                        ${tagsHtmlFinal}
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+
+            // attach click listeners for premium locked cards
+            document.querySelectorAll('.card.premium-locked').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // prevent if click on overlay itself?
+                    if (e.target.closest('.lock-overlay') || e.target.closest('.premium-badge')) {
+                        openModal();
+                    } else {
+                        // also open if clicked elsewhere on card
+                        openModal();
+                    }
+                });
+            });
+        }
+
+        // ── search ──
+        searchInput.addEventListener('input', () => {
+            searchQuery = searchInput.value.trim();
+            render();
+        });
+
+        // ── tabs ──
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeTab = btn.dataset.tab;
+                render();
+            });
+        });
+
+        // ── scroll to top ──
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ── initial render ──
+        render();
+
+        // ── keyboard shortcut: focus search ──
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            if (e.key === 'Escape') {
+                searchInput.blur();
+                searchInput.value = '';
+                searchQuery = '';
+                render();
+            }
+        });
+
+        console.log('⚡ LordvinCidev · Termux A–Z loaded');
+        console.log(`📦 ${entries.length} entries available`);
+        // PASSWORD: lordvinciAH90  (for reference)
+    </script>
+</body>
+</html>
